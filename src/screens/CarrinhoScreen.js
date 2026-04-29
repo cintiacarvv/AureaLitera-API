@@ -118,7 +118,7 @@ export default function CarrinhoScreen({ navigation }) {
           
           <TouchableOpacity 
             style={styles.checkoutBtn}
-            onPress={() => navigation.navigate("Pagamento", { total: total.toFixed(2) })}
+            onPress={() => navigation.navigate("Checkout", { total: total.toFixed(2) })}
           >
             <Text style={styles.checkoutBtnText}>Finalizar Compra</Text>
           </TouchableOpacity>

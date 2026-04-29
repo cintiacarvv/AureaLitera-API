@@ -1,7 +1,6 @@
-//import 'react-native-reanimated';
 import 'react-native-gesture-handler';
 import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useFonts } from 'expo-font';
 
@@ -12,9 +11,37 @@ import EsqueciSenhaScreen from "./src/screens/EsqueciSenhaScreen";
 import CarrinhoScreen from "./src/screens/CarrinhoScreen";
 import PagamentoScreen from "./src/screens/PagamentoScreen";
 import CategoriaScreen from "./src/screens/CategoriaScreen";
-
+import MeusLivrosScreen from "./src/screens/MeusLivrosScreen";
 import HomeScreen from "./src/screens/HomeScreen";
+import PerfilScreen from "./src/screens/PerfilScreen";
+import MeusPedidosScreen from "./src/screens/MeusPedidosScreen";
+import AdminLivrosScreen from "./src/screens/AdminLivrosScreen";
+import CheckoutScreen from "./src/screens/CheckoutScreen";
+
+
 const Stack = createNativeStackNavigator();
+
+function Routes() {
+  return (
+    <NavigationContainer theme={DefaultTheme}>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Cadastro" component={CadastroScreen} />
+        <Stack.Screen name="EsqueciSenha" component={EsqueciSenhaScreen} />
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Categoria" component={CategoriaScreen} />
+        <Stack.Screen name="BookDetails" component={BookDetailsScreen} />
+        <Stack.Screen name="Carrinho" component={CarrinhoScreen} />
+        <Stack.Screen name="Pagamento" component={PagamentoScreen} />
+        <Stack.Screen name="Biblioteca" component={MeusLivrosScreen} />
+        <Stack.Screen name="Perfil" component={PerfilScreen} />
+        <Stack.Screen name="MeusPedidos" component={MeusPedidosScreen} />
+        <Stack.Screen name="AdminLivros" component={AdminLivrosScreen} />
+        <Stack.Screen name="Checkout" component={CheckoutScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -24,19 +51,5 @@ export default function App() {
 
   if (!fontsLoaded) return null;
 
-  return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Cadastro" component={CadastroScreen} />
-        <Stack.Screen name="EsqueciSenha" component={EsqueciSenhaScreen} />
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Categoria" component={CategoriaScreen} />
-        <Stack.Screen name="BookDetails" component={BookDetailsScreen} />
-        <Stack.Screen name="Carrinho" component={CarrinhoScreen} />
-        
-        <Stack.Screen name="Pagamento" component={PagamentoScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+  return <Routes />;
 }

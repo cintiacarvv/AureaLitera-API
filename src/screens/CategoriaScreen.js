@@ -34,9 +34,15 @@ export default function CategoriaScreen({ route, navigation }) {
         <Text style={styles.bookTitle} numberOfLines={2}>{item.title}</Text>
         <Text style={styles.bookAuthor}>{item.author}</Text>
         <Text style={styles.bookPrice}>{item.price}</Text>
-        <TouchableOpacity style={styles.buyButton}>
+
+        {/* ✅ BOTÃO AJUSTADO */}
+        <TouchableOpacity
+          style={styles.buyButton}
+          onPress={() => navigation.navigate("BookDetails", { livro: item })}
+        >
           <Text style={styles.buyButtonText}>Ver Detalhes</Text>
         </TouchableOpacity>
+
       </View>
     </TouchableOpacity>
   );

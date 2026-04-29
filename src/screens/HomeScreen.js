@@ -49,14 +49,14 @@ export default function HomeScreen({ navigation }) {
         visible={menuVisible}
         onRequestClose={() => setMenuVisible(false)}
       >
-        <TouchableOpacity 
-          style={styles.modalOverlay} 
-          activeOpacity={1} 
+        <TouchableOpacity
+          style={styles.modalOverlay}
+          activeOpacity={1}
           onPress={() => setMenuVisible(false)}
         >
           <View style={styles.menuContainer}>
             <Text style={styles.menuTitle}>Categorias</Text>
-            
+
             <TouchableOpacity style={styles.menuItem} onPress={() => handleNavigate("Terror")}>
               <Ionicons name="skull-outline" size={22} color={COLORS.primary} />
               <Text style={styles.menuItemText}>Terror</Text>
@@ -86,7 +86,7 @@ export default function HomeScreen({ navigation }) {
           <TouchableOpacity onPress={() => setMenuVisible(true)}>
             <Ionicons name="menu" size={37} color="#555" />
           </TouchableOpacity>
-          
+
           <View style={styles.searchBox}>
             <TextInput placeholder="Search" style={styles.input} />
             <Ionicons name="search" size={20} color="#555" />
@@ -123,15 +123,31 @@ export default function HomeScreen({ navigation }) {
 
         <View style={styles.popularContainer}>
           <Text style={styles.popularTitle}>Mais procurados do momento</Text>
+
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             {books.map((item, index) => (
-              <Image key={index} source={item} style={styles.popularBook} />
+              <TouchableOpacity
+                key={index}
+                onPress={() =>
+                  navigation.navigate("BookDetails", {
+                    book: {
+                      id: index,
+                      image: item,
+                      title: `Livro ${index + 1}`,
+                      author: "Autor desconhecido",
+                    },
+                  })
+                }
+              >
+                <Image source={item} style={styles.popularBook} />
+              </TouchableOpacity>
             ))}
           </ScrollView>
         </View>
 
         <View style={styles.recommendedContainer}>
           <Text style={styles.recommendedTitle}>Recomendados para você</Text>
+
           {recommendedBooks.map((book) => (
             <TouchableOpacity
               key={book.id}
@@ -186,12 +202,14 @@ const styles = StyleSheet.create({
   },
   header: { paddingHorizontal: 25 },
   headerText: { fontSize: 28, fontFamily: "PoppinsBold", color: '#555' },
+
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginHorizontal: 20,
     marginTop: 20,
   },
+
   searchBox: {
     flex: 1,
     flexDirection: 'row',
@@ -203,13 +221,16 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     justifyContent: 'space-between',
   },
+
   input: { flex: 1, marginHorizontal: 10, fontFamily: "PoppinsSemiBold" },
+
   sectionTitle: {
     marginHorizontal: 15,
     marginTop: 15,
     fontFamily: "PoppinsBold",
     color: '#555',
   },
+
   card: {
     marginHorizontal: 15,
     marginTop: 10,
@@ -218,17 +239,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+
   bookImage: { width: 50, height: 70, borderRadius: 5, marginRight: 10 },
+
   cardTitle: { color: '#fff', fontFamily: "PoppinsBold" },
   cardAuthor: { color: '#fff', fontSize: 12 },
+
   progress: {
     backgroundColor: 'rgba(255,255,255,0.3)',
     padding: 10,
     borderRadius: 50,
   },
+
   progressText: { color: '#fff' },
+
   banner: { marginHorizontal: 15, marginTop: 20, alignItems: 'center' },
+
   bannerImage: { width: screenWidth - 30, height: 300, borderRadius: 15 },
+
   bannerOverlay: {
     position: 'absolute',
     top: 0,
@@ -237,21 +265,33 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     alignItems: 'center',
   },
+
   bannerText: { color: 'white', fontFamily: "PoppinsBold" },
+
   popularContainer: {
     backgroundColor: COLORS.primary,
     marginTop: 20,
     paddingVertical: 15,
   },
+
   popularTitle: {
     color: COLORS.white,
     fontFamily: "PoppinsBold",
     marginLeft: 15,
     marginBottom: 10,
   },
+
   popularBook: { width: 100, height: 150, marginLeft: 15, borderRadius: 10 },
+
   recommendedContainer: { marginHorizontal: 15, marginTop: 20 },
-  recommendedTitle: { fontFamily: "PoppinsBold", fontSize: 20, color: '#555', marginBottom: 15 },
+
+  recommendedTitle: {
+    fontFamily: "PoppinsBold",
+    fontSize: 20,
+    color: '#555',
+    marginBottom: 15
+  },
+
   recommendedBookCard: {
     flexDirection: 'row',
     backgroundColor: 'white',
@@ -260,12 +300,17 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     elevation: 3,
   },
+
   recommendedBookImage: { width: 70, height: 100, borderRadius: 10, marginRight: 15 },
+
   bookInfo: { flex: 1, justifyContent: 'space-between' },
+
   bookTitle: { fontSize: 16, fontFamily: "PoppinsBold", color: '#333' },
   bookAuthor: { fontSize: 14, color: '#666' },
+
   rating: { flexDirection: 'row', alignItems: 'center' },
   ratingText: { marginLeft: 5, fontFamily: "PoppinsSemiBold" },
+
   bottomTab: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -275,11 +320,13 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: '100%',
   },
+
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'flex-start',
   },
+
   menuContainer: {
     backgroundColor: '#FAF6EF',
     width: '70%',
@@ -289,12 +336,14 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 25,
     borderBottomRightRadius: 25,
   },
+
   menuTitle: {
     fontSize: 24,
     fontFamily: 'PoppinsBold',
     color: '#AE0000',
     marginBottom: 30,
   },
+
   menuItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -302,6 +351,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
   },
+
   menuItemText: {
     fontSize: 18,
     fontFamily: 'PoppinsSemiBold',
