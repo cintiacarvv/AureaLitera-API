@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "name": "aurealitera_pi",
+    "slug": "aurealitera_pi",
+    "version": "1.0.0",
+    "newArchEnabled": true, 
+    "jsEngine": "hermes",
+    "ios": {
+      "supportsTablet": true
+    }
+  }
+}
