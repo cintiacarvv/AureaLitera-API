@@ -51,7 +51,7 @@ Possui:
 
 ## Como executar o projeto
 
-- git clone https://github.com/cintiacarvv/AureaLitera-PI.git
+- git clone https://github.com/cintiacarvv/AureaLitera-API
 - cd AureaLitera
 - npx expo start
 - abrir o expo go
