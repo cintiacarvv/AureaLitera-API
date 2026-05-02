@@ -27,7 +27,7 @@ export default function CadastroScreen({ navigation }) {
     let erro = false;
     if (!nome) { setErroNome("Digite seu nome"); erro = true; } else setErroNome("");
     if (!emailValido) { setErroEmail("Digite um email válido"); erro = true; } else setErroEmail("");
-    if (!senhaValida) { setErroSenha("Senha: 6 dígitos, 1 maiúscula e 1 número"); erro = true; } else setErroSenha("");
+    if (!senhaValida) { setErroSenha("Senha: 6 dígitos (um caractére especial, uma maiúscula e um número)"); erro = true; } else setErroSenha("");
     if (!senhasIguais) { setErroConfirmar("As senhas não coincidem"); erro = true; } else setErroConfirmar("");
 
     if (erro) return;
@@ -82,7 +82,7 @@ export default function CadastroScreen({ navigation }) {
         </View>
         {erroConfirmar !== "" && <Text style={styles.erro}>{erroConfirmar}</Text>}
 
-        <Text style={styles.infoSenha}>Mínimo 6 caracteres, 1 maiúscula e 1 número.</Text>
+        <Text style={styles.infoSenha}>Senha deve conter 6 dígitos (um caractére especial, uma maiúscula e um número)</Text>
 
         <TouchableOpacity onPress={handleCadastro} disabled={!formValido} style={styles.buttonWrapper}>
           <LinearGradient colors={formValido ? ["#AE0000", "#8E5050"] : ["#ccc", "#aaa"]} style={styles.button}>
