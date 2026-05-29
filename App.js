@@ -4,6 +4,8 @@ import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useFonts } from 'expo-font';
 
+import { CartProvider } from './src/context/CartContext';
+
 import BookDetailsScreen from "./src/screens/BookDetailsScreen";
 import LoginScreen from "./src/screens/LoginScreen";
 import CadastroScreen from "./src/screens/CadastroScreen";
@@ -17,7 +19,8 @@ import PerfilScreen from "./src/screens/PerfilScreen";
 import MeusPedidosScreen from "./src/screens/MeusPedidosScreen";
 import AdminLivrosScreen from "./src/screens/AdminLivrosScreen";
 import CheckoutScreen from "./src/screens/CheckoutScreen";
-
+import LeitorScreen from "./src/screens/LeitorScreen";
+import NovaSenhaScreen from "./src/screens/NovaSenhaScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -38,6 +41,8 @@ function Routes() {
         <Stack.Screen name="MeusPedidos" component={MeusPedidosScreen} />
         <Stack.Screen name="AdminLivros" component={AdminLivrosScreen} />
         <Stack.Screen name="Checkout" component={CheckoutScreen} />
+        <Stack.Screen name="Leitor" component={LeitorScreen} />
+        <Stack.Screen name="NovaSenha" component={NovaSenhaScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -51,5 +56,9 @@ export default function App() {
 
   if (!fontsLoaded) return null;
 
-  return <Routes />;
+  return (
+    <CartProvider>
+      <Routes />
+    </CartProvider>
+  );
 }

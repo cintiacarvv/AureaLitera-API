@@ -14,39 +14,40 @@ import { StatusBar } from "expo-status-bar";
 
 const API_URL = Constants.expoConfig.extra.apiUrl; // mesmo IP do projeto
 
-export default function EsqueciSenhaScreen({ navigation }) {
-  const [email, setEmail] = useState("");
-  const [erroEmail, setErroEmail] = useState("");
+export default function NovaSenhaScreen({ navigation, route }) {
+  const { email } = route.params;
+
+  const [novaSenha, setNovaSenha] = useState("");
+  const [confirmarSenha, setConfirmarSenha] = useState("");
+  const [mostrarNova, setMostrarNova] = useState(false);
+  const [mostrarConfirmar, setMostrarConfirmar] = useState(false);
   const [carregando, setCarregando] = useState(false);
 
-  const emailValido = email.includes("@") && email.length > 5;
-  const formValido = emailValido;
+  const senhaValida = novaSenha.length >= 6;
+  const senhasIguais = novaSenha === confirmarSenha;
+  const formValido = senhaValida && senhasIguais && confirmarSenha.length > 0;
 
-  async function handleEnviar() {
-    if (!emailValido) {
-      setErroEmail("Digite um email válido");
-      return;
-    }
+  async function handleSalvar() {
+    if (!formValido) return;
 
-    setErroEmail("");
     setCarregando(true);
-
     try {
-      const response = await fetch(`${API_URL}/api/users/check-email`, {
+      const response = await fetch(`${API_URL}/api/users/reset-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, newPassword: novaSenha }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        setErroEmail("Email não encontrado em nossa base de dados");
+        Alert.alert("Erro", data.error || "Não foi possível atualizar a senha.");
         return;
       }
 
-      // Email existe → avança para tela de nova senha
-      navigation.navigate("NovaSenha", { email });
+      Alert.alert("Sucesso!", "Sua senha foi atualizada. Faça login.", [
+        { text: "OK", onPress: () => navigation.navigate("Login") },
+      ]);
     } catch {
       Alert.alert("Erro", "Não foi possível conectar ao servidor.");
     } finally {
@@ -68,38 +69,73 @@ export default function EsqueciSenhaScreen({ navigation }) {
       </TouchableOpacity>
 
       <View style={styles.content}>
-        <Text style={styles.title}>Esqueceu sua senha?</Text>
+        <Text style={styles.title}>Nova senha</Text>
 
         <Text style={styles.subtitle}>
-          Digite o e-mail cadastrado para redefinir sua senha.
+          Escolha uma nova senha para a sua conta.
         </Text>
 
+        {/* Campo Nova Senha */}
         <View
           style={[
             styles.inputContainer,
-            erroEmail !== "" && styles.inputErro,
+            novaSenha.length > 0 && !senhaValida && styles.inputErro,
           ]}
         >
-          <Ionicons name="mail-outline" size={20} color="#777" />
+          <Ionicons name="lock-closed-outline" size={20} color="#777" />
           <TextInput
-            placeholder="Digite seu email"
-            value={email}
-            onChangeText={(v) => {
-              setEmail(v);
-              setErroEmail("");
-            }}
-            keyboardType="email-address"
-            autoCapitalize="none"
+            placeholder="Nova senha (mín. 6 caracteres)"
+            value={novaSenha}
+            onChangeText={setNovaSenha}
+            secureTextEntry={!mostrarNova}
             style={styles.input}
           />
+          <TouchableOpacity onPress={() => setMostrarNova(!mostrarNova)}>
+            <Ionicons
+              name={mostrarNova ? "eye-off-outline" : "eye-outline"}
+              size={20}
+              color="#777"
+            />
+          </TouchableOpacity>
         </View>
 
-        {erroEmail !== "" && (
-          <Text style={styles.erro}>{erroEmail}</Text>
+        {novaSenha.length > 0 && !senhaValida && (
+          <Text style={styles.erro}>A senha deve ter pelo menos 6 caracteres</Text>
         )}
 
+        {/* Campo Confirmar Senha */}
+        <View
+          style={[
+            styles.inputContainer,
+            confirmarSenha.length > 0 && !senhasIguais && styles.inputErro,
+          ]}
+        >
+          <Ionicons name="lock-closed-outline" size={20} color="#777" />
+          <TextInput
+            placeholder="Confirmar nova senha"
+            value={confirmarSenha}
+            onChangeText={setConfirmarSenha}
+            secureTextEntry={!mostrarConfirmar}
+            style={styles.input}
+          />
+          <TouchableOpacity
+            onPress={() => setMostrarConfirmar(!mostrarConfirmar)}
+          >
+            <Ionicons
+              name={mostrarConfirmar ? "eye-off-outline" : "eye-outline"}
+              size={20}
+              color="#777"
+            />
+          </TouchableOpacity>
+        </View>
+
+        {confirmarSenha.length > 0 && !senhasIguais && (
+          <Text style={styles.erro}>As senhas não coincidem</Text>
+        )}
+
+        {/* Botão Salvar */}
         <TouchableOpacity
-          onPress={handleEnviar}
+          onPress={handleSalvar}
           disabled={!formValido || carregando}
           style={styles.buttonWrapper}
         >
@@ -110,7 +146,7 @@ export default function EsqueciSenhaScreen({ navigation }) {
             style={styles.button}
           >
             <Text style={styles.buttonText}>
-              {carregando ? "Verificando..." : "Continuar"}
+              {carregando ? "Salvando..." : "Salvar senha"}
             </Text>
           </LinearGradient>
         </TouchableOpacity>
@@ -197,7 +233,7 @@ const styles = StyleSheet.create({
 
   buttonWrapper: {
     width: "85%",
-    marginTop: 10,
+    marginTop: 15,
   },
 
   button: {

@@ -1,4 +1,5 @@
 import React from "react";
+import { useCart } from "../context/CartContext";
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from '@expo/vector-icons';
@@ -7,10 +8,11 @@ import { StatusBar } from 'expo-status-bar';
 
 export default function BookDetailsScreen({ route, navigation }) {
 
-  // ✅ CORREÇÃO AQUI
   const book = route?.params?.book || route?.params?.livro;
+  const user = route?.params?.user || {};
+  const { addToCart, cartItems } = useCart();
+  const alreadyInCart = cartItems.some((i) => String(i.id) === String(book?.id));
 
-  // ✅ PROTEÇÃO PARA NÃO QUEBRAR
   if (!book) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -18,6 +20,17 @@ export default function BookDetailsScreen({ route, navigation }) {
       </View>
     );
   }
+
+  // Compatibilidade com campos do banco (format, pages, description)
+  // e campos legados das telas fixas (formato, paginas, descricao)
+  const formato = book.format || book.formato || "eBook";
+  const paginas = book.pages || book.paginas || "-";
+  const descricao = book.description || book.descricao || "Sem descrição disponível.";
+  const categoria = book.category || book.categoria || null;
+
+  const imageSource = typeof book.image === "string"
+    ? { uri: book.image }
+    : book.image;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -35,7 +48,13 @@ export default function BookDetailsScreen({ route, navigation }) {
           end={{ x: 1, y: 0 }}
           style={styles.card}
         >
-          <Image source={book.image} style={styles.bookImage} />
+          {imageSource ? (
+            <Image source={imageSource} style={styles.bookImage} />
+          ) : (
+            <View style={[styles.bookImage, styles.bookImagePlaceholder]}>
+              <Ionicons name="book-outline" size={40} color="#fff" />
+            </View>
+          )}
 
           <View style={styles.bookInfo}>
             <Text style={styles.bookTitle}>{book.title}</Text>
@@ -46,17 +65,22 @@ export default function BookDetailsScreen({ route, navigation }) {
             </Text>
 
             <View style={styles.rating}>
-              {[...Array(5)].map((_, i) => (
-                <Ionicons key={i} name="star" size={18} color="#FFD700" />
+              {[1,2,3,4,5].map((i) => (
+                <Ionicons key={i} name={i <= (book.rating || 0) ? "star" : "star-outline"} size={18} color={i <= (book.rating || 0) ? "#FFD700" : "rgba(255,255,255,0.5)"} />
               ))}
             </View>
 
             <View style={styles.buyButtonContainer}>
               <TouchableOpacity
-                style={styles.buyButton}
-                onPress={() => navigation.navigate("Carrinho", { book })}
+                style={[styles.buyButton, alreadyInCart && styles.buyButtonAdded]}
+                onPress={() => {
+                  addToCart(book);
+                  navigation.navigate("Carrinho", { user });
+                }}
               >
-                <Text style={styles.buyButtonText}>Comprar</Text>
+                <Text style={styles.buyButtonText}>
+                  {alreadyInCart ? '+ Adicionar novamente' : 'Comprar'}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -70,30 +94,28 @@ export default function BookDetailsScreen({ route, navigation }) {
 
           <View style={styles.detailItem}>
             <Text style={styles.detailLabel}>Formato</Text>
-            <Text style={styles.detailValue}>{book.formato || "eBook"}</Text>
+            <Text style={styles.detailValue}>{formato}</Text>
           </View>
 
           <View style={styles.detailItem}>
             <Text style={styles.detailLabel}>Páginas</Text>
-            <Text style={styles.detailValue}>{book.paginas || "-"}</Text>
+            <Text style={styles.detailValue}>{paginas}</Text>
           </View>
         </View>
 
-        <View style={styles.genreContainer}>
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("Categoria", { tipo: book.category })
-            }
-          >
-            <Text style={styles.genreTag}>{book.category}</Text>
-          </TouchableOpacity>
-        </View>
+        {categoria ? (
+          <View style={styles.genreContainer}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Categoria", { tipo: categoria })}
+            >
+              <Text style={styles.genreTag}>{categoria}</Text>
+            </TouchableOpacity>
+          </View>
+        ) : null}
 
         <View style={styles.descriptionContainer}>
           <Text style={styles.tabTitle}>Descrição</Text>
-          <Text style={styles.descriptionText}>
-            {book.descricao || "Sem descrição disponível."}
-          </Text>
+          <Text style={styles.descriptionText}>{descricao}</Text>
         </View>
 
       </ScrollView>
@@ -127,6 +149,12 @@ const styles = StyleSheet.create({
     width: 110,
     height: 180,
     borderRadius: 10,
+  },
+
+  bookImagePlaceholder: {
+    backgroundColor: "rgba(255,255,255,0.2)",
+    justifyContent: "center",
+    alignItems: "center",
   },
 
   bookInfo: {
@@ -168,6 +196,9 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 35,
     borderRadius: 25,
+  },
+  buyButtonAdded: {
+    backgroundColor: "rgba(255,255,255,0.75)",
   },
 
   buyButtonText: {
