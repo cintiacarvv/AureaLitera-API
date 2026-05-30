@@ -34,7 +34,17 @@ export const bookService = {
   listarTodos: async () => {
     try {
       const storageValue = await AsyncStorage.getItem(STORAGE_KEY);
-      return storageValue ? JSON.parse(storageValue) : [];
+      const dynamicBooks = storageValue ? JSON.parse(storageValue) : [];
+      
+      const fixedBooks = [
+        { id: "fixo_rec_1", title: "A sutil arte de ligar o fod*-se", author: "Mark Manson", price: "35.50", image: require('../../assets/book2.jpg'), location: "recomendados", category: "Infantil", description: "Uma abordagem surpreendente e libertadora para viver uma vida melhor." },
+        { id: "fixo_rec_2", title: "A bailarina de Auschwitz", author: "Edith Eva Eger", price: "29.90", image: require('../../assets/book3.jpg'), location: "recomendados", category: "Autoajuda", description: "Uma história inesquecível de superação e escolha pela vida." },
+        { id: "fixo_cat_1", title: "Todas as coisas que eu te escreveria se eu pudesse", author: "Igor Pires", price: "45.90", image: require('../../assets/book4.jpg'), location: "catalogo", category: "Terror", description: "Poemas e textos sobre amor, saudade e recomeços." },
+        { id: "fixo_cat_2", title: "Textos para tocar cicatrizes", author: "Igor Pires", price: "39.90", image: require('../../assets/book5.jpg'), location: "catalogo", category: "Autoajuda", description: "Sobre feridas que carregamos e a coragem de deixá-las curar." },
+        { id: "fixo_cat_3", title: "Cartas de um diabo a seu aprendiz", author: "C.S. Lewis", price: "30.00", image: require('../../assets/book6.jpg'), location: "catalogo", category: "Infantil", description: "Uma sátira genial sobre a natureza da tentação humana." }
+      ];
+
+      return [...fixedBooks, ...dynamicBooks];
     } catch (error) {
       console.error("Erro ao listar livros:", error);
       return [];

@@ -133,14 +133,14 @@ export default function HomeScreen({ navigation, route }) {
 
             <TouchableOpacity
               style={styles.menuItem}
-              onPress={() => handleNavigate("Ficção")}
+              onPress={() => handleNavigate("Infantil")}
             >
               <Ionicons
-                name="rocket-outline"
+                name="color-palette-outline"
                 size={22}
                 color={COLORS.primary}
               />
-              <Text style={styles.menuItemText}>Ficção</Text>
+              <Text style={styles.menuItemText}>Infantil</Text>
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
@@ -227,7 +227,7 @@ export default function HomeScreen({ navigation, route }) {
                   }
                 >
                   <Image
-                    source={{ uri: item.image }}
+                    source={typeof item.image === 'string' ? { uri: item.image } : item.image}
                     style={styles.popularBook}
                   />
                 </TouchableOpacity>
@@ -251,7 +251,7 @@ export default function HomeScreen({ navigation, route }) {
                 onPress={() => navigation.navigate("BookDetails", { book })}
               >
                 <Image
-                  source={{ uri: book.image }}
+                  source={typeof book.image === 'string' ? { uri: book.image } : book.image}
                   style={styles.recommendedBookImage}
                 />
 
@@ -333,7 +333,6 @@ export default function HomeScreen({ navigation, route }) {
 
           <View style={styles.footerDevs}>
             <Text style={styles.footerDevTitle}>C-Level Executives:</Text>
-            <Text style={styles.footerDevText}>Cintia Oliveira - CEO</Text>
             <Text style={styles.footerDevText}>Vinicius Avarelo - CEO</Text>
             <Text style={styles.footerDevText}>Melvin Expedito - CEO</Text>
             <Text style={styles.footerDevText}>Laiane Ferreira - CEO</Text>
