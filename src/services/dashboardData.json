@@ -1,0 +1,88 @@
+{
+  "gerado_em": "2026-05-30T00:18:38.112Z",
+  "kpis_gerais": {
+    "receita_total": 230444.2,
+    "usuarios_ativos": 3718,
+    "total_pedidos": 1913,
+    "livros_cadastrados": 850
+  },
+  "vendas_por_formato": [
+    {
+      "formato": "E-book",
+      "quantidade": 4958,
+      "receita": 98664.2,
+      "cor": "#4CAF50"
+    },
+    {
+      "formato": "Físico",
+      "quantidade": 872,
+      "receita": 47960,
+      "cor": "#FF9800"
+    },
+    {
+      "formato": "Audiobook",
+      "quantidade": 2794,
+      "receita": 83820,
+      "cor": "#2196F3"
+    }
+  ],
+  "faturamento_mensal_2026": [
+    {
+      "mes": "Jan",
+      "fisico": 13231,
+      "digital": 20861
+    },
+    {
+      "mes": "Fev",
+      "fisico": 13030,
+      "digital": 24742
+    },
+    {
+      "mes": "Mar",
+      "fisico": 10431,
+      "digital": 21782
+    },
+    {
+      "mes": "Abr",
+      "fisico": 14281,
+      "digital": 20428
+    },
+    {
+      "mes": "Mai",
+      "fisico": 10143,
+      "digital": 23685
+    }
+  ],
+  "top_5_livros_vendidos": [
+    {
+      "id": 101,
+      "titulo": "A Bailarina de Auschwitz",
+      "autor": "Edith Eva Eger",
+      "vendas": 776
+    },
+    {
+      "id": 102,
+      "titulo": "O Iluminado",
+      "autor": "Stephen King",
+      "vendas": 521
+    },
+    {
+      "id": 103,
+      "titulo": "Hábitos Atômicos",
+      "autor": "James Clear",
+      "vendas": 513
+    },
+    {
+      "id": 104,
+      "titulo": "Sapiens",
+      "autor": "Yuval Noah Harari",
+      "vendas": 318
+    },
+    {
+      "id": 105,
+      "titulo": "Duna",
+      "autor": "Frank Herbert",
+      "vendas": 419
+    }
+  ]
+}
